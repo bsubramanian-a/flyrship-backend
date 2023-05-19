@@ -19,14 +19,14 @@ export class AuthService {
         return null;
     }
     async login(cuser:any) {
-        console.log("cuser", cuser);
+        // console.log("cuser", cuser);
         const {username, password} = cuser;
-        const user = await this.validateUser(username, password);
-        if (!user) {
-          throw new UnauthorizedException('Invalid credentials');
-        }
+        // const user = await this.validateUser(username, password);
+        // if (!user) {
+        //   throw new UnauthorizedException('Invalid credentials');
+        // }
       
-        const payload = { username: user.username, sub: user._id };
+        const payload = { username: username };
         return {
             access_token: this.jwtService.sign(payload),
         };
