@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, NotFoundException } from '@nestjs/common';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { USER_REPOSITORY } from 'src/core/constants';
@@ -35,10 +35,6 @@ export class UsersService {
   }
   
   extractUsernameFromEmail(email: string): string {
-    // Extract the username from the email. You can implement your own logic here.
-    // For example, if the email is "example@example.com", the username would be "example".
-    // You can use regular expressions or string manipulation to extract the username.
-    // Make sure to handle different email formats appropriately.
     return email.split('@')[0];
   }  
 
@@ -49,5 +45,26 @@ export class UsersService {
       }
     });
     return user;
+  }
+
+  async getUserProfile(userId: string): Promise<User> {
+    const user = await this.userRepository.findByPk(userId);
+  
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+  
+    return user;
+  }  
+
+  async updateUser(id: number, updateUserDto: any): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!user) {
+      // Handle user not found error
+    }
+
+    const updatedUser = await user.update(updateUserDto);
+    return updatedUser;
   }
 }

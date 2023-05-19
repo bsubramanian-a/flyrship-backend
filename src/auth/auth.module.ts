@@ -8,14 +8,18 @@ import { UsersService } from 'src/users/users.service';
 import { LocalStrategy } from './local-strategy';
 import { USER_REPOSITORY } from 'src/core/constants';
 import { User } from 'src/users/user.entity';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 @Module({
   imports: [
     UserModule,
     PassportModule,
     JwtModule.register({
-      secret: 'secretKey',
-      signOptions: { expiresIn: '60s' },
+      global: true,
+      secret: process.env.JWT_CONTSTANT,
+      signOptions: { expiresIn: '1h' },
     }),
   ],
   providers: [AuthService, UsersService, LocalStrategy,

@@ -48,4 +48,95 @@ export class User extends Model<User> {
     allowNull: false,
   })
   phone: string;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    unique: false,
+    allowNull: true,
+  })
+  is_email_public: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    unique: false,
+    allowNull: true,
+  })
+  is_phone_public: boolean;
+
+  @Column({
+    type: DataType.STRING,
+    unique: false,
+    allowNull: true,
+  })
+  facebook: string;
+  
+  @Column({
+    type: DataType.STRING,
+    unique: false,
+    allowNull: true,
+  })
+  twitter: string;
+  
+  @Column({
+    type: DataType.STRING,
+    unique: false,
+    allowNull: true,
+  })
+  instagram: string;
+
+  @Column({
+    type: DataType.STRING,
+    unique: false,
+    allowNull: true,
+  })
+  linkedin: string;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    unique: false,
+    allowNull: true,
+  })
+  is_social_public: boolean;
+
+  @Column({
+    type: DataType.STRING,
+    unique: false,
+    allowNull: true,
+  })
+  address: string;
+
+  @Column({
+    type: DataType.STRING,
+    unique: false,
+    allowNull: true,
+  })
+  city: string;
+
+  @Column({
+    type: DataType.INTEGER,
+    unique: false,
+    allowNull: true,
+  })
+  zip: number;
+
+  @Column({
+    type: DataType.STRING,
+    unique: false,
+    allowNull: true,
+  })
+  state: string;
+
+  @Column({
+    type: DataType.STRING,
+    unique: false,
+    allowNull: true,
+  })
+  country: string;
+
+  @Column({
+    type: DataType.TEXT,
+    unique: false,
+    allowNull: true,
+  }) 
+  about_me: string;
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Param, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Post, Param, HttpStatus, Put, UseGuards, Request, Get } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt'
@@ -7,8 +7,9 @@ import { BadRequestException } from '@nestjs/common';
 import { validateSync } from 'class-validator';
 import { CreateUserDtoValidator } from './dto/create-user-dto-validator';
 import { plainToClass } from 'class-transformer';
+import { AuthGuard } from 'src/auth/auth.guard';
 
-@Controller('auth')
+@Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -49,5 +50,23 @@ export class UsersController {
     });
 
     return result;
+  } 
+
+  @Get('profile')
+  @UseGuards(AuthGuard)
+  async getProfile(@Request() req: any) {
+    const userId = req.user.sub;
+
+    const userProfile = await this.usersService.getUserProfile(userId);
+    return userProfile;
+  } 
+
+  @Put('profile')
+  @UseGuards(AuthGuard)
+  async updateProfile(@Body() updateProfileDto: any, @Request() req: any) {
+    const userId = req.user.sub;
+
+    const updatedUser = await this.usersService.updateUser(userId, updateProfileDto);
+    return updatedUser;
   }
 }

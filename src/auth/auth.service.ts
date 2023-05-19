@@ -21,12 +21,12 @@ export class AuthService {
     async login(cuser:any) {
         // console.log("cuser", cuser);
         const {username, password} = cuser;
-        // const user = await this.validateUser(username, password);
+        const user = await this.validateUser(username, password);
         // if (!user) {
         //   throw new UnauthorizedException('Invalid credentials');
         // }
       
-        const payload = { username: username };
+        const payload = { username: username, sub: user.id };
         return {
             access_token: this.jwtService.sign(payload),
         };
