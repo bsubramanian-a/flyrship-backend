@@ -18,11 +18,12 @@ import { User } from 'src/users/user.entity';
       signOptions: { expiresIn: '60s' },
     }),
   ],
-  providers: [AuthService, UsersService,  LocalStrategy,
+  providers: [AuthService, UsersService, LocalStrategy,
     {
       provide: USER_REPOSITORY,
       useValue: User, // The repository entity
-    }],
+    }
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}

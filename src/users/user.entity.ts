@@ -1,26 +1,51 @@
-import { Entity, Column, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Model, Column, Table, Unique, AutoIncrement, PrimaryKey, DataType } from 'sequelize-typescript';
 
-@Entity()
-@Unique(['username', 'email'])
-export class User {
-  @PrimaryGeneratedColumn()
+@Table
+export class User extends Model<User> {
+  @AutoIncrement
+  @PrimaryKey
+  @Column
   id: number;
 
-  @Column()
+  @Column({
+    type: DataType.STRING,
+    unique: true,
+    allowNull: false,
+  })
   username: string;
 
-  @Column()
+  @Column({
+    type: DataType.STRING, 
+    unique: false,
+    allowNull: false,
+  })
   password: string;
 
-  @Column()
+  @Column({
+    type: DataType.STRING,
+    unique: true,
+    allowNull: false,
+  })
   email: string;
 
-  @Column()
+  @Column({
+    type: DataType.STRING,
+    unique: false,
+    allowNull: false,
+  })
   firstname: string;
 
-  @Column()
+  @Column({
+    type: DataType.STRING,
+    unique: false,
+    allowNull: false,
+  })
   lastname: string;
 
-  @Column()
+  @Column({
+    type: DataType.STRING,
+    unique: false,
+    allowNull: false,
+  })
   phone: string;
 }
