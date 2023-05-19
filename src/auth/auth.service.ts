@@ -7,7 +7,7 @@ import { JwtService } from '@nestjs/jwt';
 export class AuthService {
     constructor(private readonly usersService: UsersService, private jwtService: JwtService) { }
     async validateUser(username: string, password: string): Promise<any> {
-        const user = await this.usersService.getUser({ username });
+        const user = await this.usersService.getUser(username);
         if (!user) return null;
         const passwordValid = await bcrypt.compare(password, user.password)
         if (!user) {
@@ -18,6 +18,7 @@ export class AuthService {
         }
         return null;
     }
+
     async login(user: any) {
         const payload = { username: user.username, sub: user._id };
         return {

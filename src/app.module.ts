@@ -4,6 +4,11 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './users/user.module';
+import { UsersService } from './users/users.service';
+import { usersProviders } from './users/users.providers';
+import { AuthService } from './auth/auth.service';
+import { JwtService } from '@nestjs/jwt';
+import { User } from './users/user.entity';
 
 @Module({
   imports: [
@@ -15,7 +20,7 @@ import { UserModule } from './users/user.module';
         username: process.env.DB_USERNAME,
         password: process.env.DB_PASSWORD,
         database: process.env.DB_DATABASE,
-        entities: [], // add your entities here
+        entities: [User], // add your entities here
         synchronize: true, // set to false in production
         ssl: {
           rejectUnauthorized: false, // Set this to true if your PostgreSQL server requires a valid SSL certificate
@@ -26,6 +31,6 @@ import { UserModule } from './users/user.module';
     UserModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, UsersService, AuthService, JwtService, ...usersProviders],
 })
 export class AppModule {}
