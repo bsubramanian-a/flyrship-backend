@@ -63,10 +63,21 @@ export class UsersController {
 
   @Put('profile')
   @UseGuards(AuthGuard)
-  async updateProfile(@Body() updateProfileDto: any, @Request() req: any) {
+  async updateProfile(@Body() user: any, @Request() req: any) {
+    console.log("controller user", user);
     const userId = req.user.sub;
 
-    const updatedUser = await this.usersService.updateUser(userId, updateProfileDto);
+    const updatedUser = await this.usersService.updateUser(userId, user);
+    return updatedUser;
+  }
+
+  @Put('change-password')
+  @UseGuards(AuthGuard)
+  async changePassword(@Body() data: any, @Request() req: any) {
+    console.log("controller user", data);
+    const userId = req.user.sub;
+
+    const updatedUser = await this.usersService.changePassword(userId, data);
     return updatedUser;
   }
 }

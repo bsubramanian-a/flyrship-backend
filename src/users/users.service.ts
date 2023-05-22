@@ -3,6 +3,7 @@ import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { USER_REPOSITORY } from 'src/core/constants';
 import { Op } from 'sequelize';
+import { hash, compare } from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -66,5 +67,34 @@ export class UsersService {
 
     const updatedUser = await user.update(updateUserDto);
     return updatedUser;
+  }
+
+  async changePassword(id: number, changePasswordDto: any): Promise<User> {
+    const { currentPassword, newPassword, confirmPassword } = changePasswordDto;
+
+    // Find the user by ID
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // Check if the current password matches
+    const isMatch = await compare(currentPassword, user.password);
+    if (!isMatch) {
+      throw new NotFoundException('Current password is incorrect');
+    }
+
+    // Check if the new password and confirm password match
+    if (newPassword !== confirmPassword) {
+      throw new NotFoundException('New password and confirm password do not match');
+    }
+
+    // Hash the new password
+    const hashedPassword = await hash(newPassword, 10);
+
+    // Update the user's password
+    await user.update({ password: hashedPassword });
+
+    return user;
   }
 }
