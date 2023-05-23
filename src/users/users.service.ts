@@ -69,7 +69,7 @@ export class UsersService {
     return updatedUser;
   }
 
-  async changePassword(id: number, changePasswordDto: any): Promise<User> {
+  async changePassword(id: number, changePasswordDto: any): Promise<any> {
     const { currentPassword, newPassword, confirmPassword } = changePasswordDto;
 
     // Find the user by ID
@@ -81,12 +81,16 @@ export class UsersService {
     // Check if the current password matches
     const isMatch = await compare(currentPassword, user.password);
     if (!isMatch) {
-      throw new NotFoundException('Current password is incorrect');
+      return {
+        error: 'Current password is incorrect',
+      };
     }
 
     // Check if the new password and confirm password match
     if (newPassword !== confirmPassword) {
-      throw new NotFoundException('New password and confirm password do not match');
+      return {
+        error: 'New password and confirm password do not match',
+      };
     }
 
     // Hash the new password
@@ -97,4 +101,16 @@ export class UsersService {
 
     return user;
   }
+
+  async deleteUser(id: string) {
+    // Find the user by ID
+    const user = await this.userRepository.findByPk(id);
+  
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+  
+    // Delete the user
+    await user.destroy();
+  }  
 }

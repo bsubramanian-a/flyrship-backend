@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Param, HttpStatus, Put, UseGuards, Request, Get } from '@nestjs/common';
+import { Body, Controller, Post, Param, HttpStatus, Put, UseGuards, Request, Get, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt'
@@ -74,10 +74,17 @@ export class UsersController {
   @Put('change-password')
   @UseGuards(AuthGuard)
   async changePassword(@Body() data: any, @Request() req: any) {
-    console.log("controller user", data);
     const userId = req.user.sub;
 
     const updatedUser = await this.usersService.changePassword(userId, data);
     return updatedUser;
+  }
+
+  @Delete('user')
+  @UseGuards(AuthGuard)
+  async deleteUser(@Request() req: any) {
+    const userId = req.user.sub;
+    await this.usersService.deleteUser(userId);
+    return { message: 'User deleted successfully' };
   }
 }
